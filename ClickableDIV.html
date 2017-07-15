@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Clickable DIV</title>
+</head>
+<body>
+
+    <div>
+        <p>Below is a clickable div</p>
+    </div>
+    <div class="card" style="width: 500px; height: 500px; background-color: blue;">
+        <div class="delete" style="width: 100px; height: 50px; background-color: chartreuse; color: black;">
+            <p>DELETE CARD</p>
+        </div>
+    </div>
+
+    <!--jQuery import-->
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <!--Onclick script-->
+    <script>
+        $(".delete").on("click", function() {
+            $(this).closest(".card").remove();
+        });
+    </script>
+</body>
+</html>
