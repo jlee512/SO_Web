@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete A Card</title>
+</head>
+<body>
+
+
+    <main>
+        <div id="add" style="width: 100px; height: 50px; background-color: chartreuse; color: black;">
+            <p>ADD CARD</p>
+        </div>
+    </main>
+
+    <!--jQuery import-->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var num = 0;
+            $("#add").click(function() {
+                $("main").append('' +
+                    '<div class="card" id="photo' + num.toString() + '" style="width: 20rem;">\
+                <div class="layer"></div>\
+                <div class="card-block">\
+                <h4 class="card-title" id="title' + num.toString() + '">CARD TITLE</h4>' +
+                    '<p class="card-text" id="text' + num.toString() + '">CARD TEXT</p>\
+                    </div>\
+                    <div class="card-block">\
+                        <div class="delete" >DELETE BUTTON</div>\
+                        <div class="edit">EDIT BUTTON</div>\
+                    </div>\
+                    </div>');
+                num ++;
+            });
+
+            $("main").on("click", ".delete" ,function() {
+                (this).closest(".card").remove();
+            });
+        });
+    </script>
+
+</body>
+</html>
