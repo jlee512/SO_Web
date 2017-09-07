@@ -137,8 +137,9 @@ function DatePicker() {
 $(document).ready(function () {
     //Initialize datepicker instance
     var datepicker = new DatePicker();
+    var interval;
 
-    //Implement core function of datepicker front-end (clicking or changing with keypress)
+    //Implement core function of datepicker front-end (clicking, holding or changing with keypress)
     $('#increase-day').on('click', function () {
         datepicker.increment_day();
     });
@@ -180,5 +181,9 @@ $(document).ready(function () {
     //Additional event handler for changing year to account for keypress
     $('#year').on('change', function () {
         datepicker.check_input_values();
+    });
+
+    $(document).on('mouseup', function () {
+        clearInterval(interval);
     });
 });
