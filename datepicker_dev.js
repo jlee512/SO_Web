@@ -29,159 +29,156 @@ function DatePicker() {
     this.year_input = $('#year');
     this.leap_year_input = $('#leap-year');
 
-    this.day_input.val(selected_day);
-    this.month_input.val(months[selected_month].name);
-    this.year_input.val(selected_year);
-    this.leap_year_input.val(leap_year);
-
-    //Method for updating the max_month_day variable
-    this.update_max_month_day = function () {
-        this.max_month_day = this.calc_maximum_month_day();
-    }
+    //Method for updating all displayed input fields
+    this.update_input_attr_val = function () {
+        //Set HTML day_input 'max' accordingly
+        this.day_input.attr('max', this.max_month_day);
+        //Set HTML day/month/year/leap_year_input values accordingly
+        this.day_input.val(this.selected_day);
+        this.month_input.val(months[this.selected_month].name);
+        this.year_input.val(this.selected_year);
+        this.leap_year_input.val(this.leap_year);
+    };
     //Call this method initially when constructed
-    this.update_max_month_day();
+    this.update_input_attr_val();
+
+    //Method for checking leap year status
+    this.check_leap_year = function () {
+        this.leap_year = (this.selected_year % 4) === 0;
+    };
+    //Call this method initially when constructed
+    this.check_leap_year();
 
     //Method to check the maximum day for a given month (factoring in leap years and month-to-month variation)
-    this.calc_maximum_month_day = function () {
+    this.calc_max_month_day = function () {
         //Function to calculate maximum allowable day within the month (adapting February for leap years)
         if (this.leap_year && this.selected_month === 1) {
-            return 29;
+            this.max_month_day = 29;
         } else {
-            return months[selected_month].max_days;
+            this.max_month_day = months[this.selected_month].max_days;
         }
-        this.update_input_attr_val();
-    }
+    };
 
     //Method for checking a given day relative to the maximum allowable day for a given month and update private variables accordingly
     this.check_max_day= function () {
-        this.update_max_month_day();
+        this.calc_max_month_day();
         if (this.selected_day > this.max_month_day) {
             this.selected_day = this.max_month_day;
-            this.update_input_attr_val();
         }
-    }
+        this.update_input_attr_val();
+    };
+    //Call this method initially when constructed
+    this.check_max_day();
 
+    //Method used to check the current day and year input values
     this.check_input_values = function () {
         this.selected_day = this.day_input.val();
         this.selected_year = this.year_input.val();
-    }
+        this.check_leap_year();
+        this.check_max_day();
+        this.update_input_attr_val();
+    };
 
-    this.update_input_attr_val = function () {
-        //Set HTML day_input 'max' accordingly
-        this.day_input.attr('max', max_month_day);
-        //Set HTML day_input value accordingly
-        this.day_input.val(selected_day);
-    }
+    this.increment_day = function () {
+        this.selected_day++;
+        if (this.selected_day > this.max_month_day) {
+            this.selected_day = 1;
+        }
+        this.update_input_attr_val();
+    };
 
+    this.decrement_day = function () {
+        this.selected_day--;
+        if (this.selected_day < 1) {
+            this.selected_day = this.max_month_day;
+        }
+        this.update_input_attr_val();
+    };
 
+    this.increment_month = function () {
+        this.selected_month++;
+        if (this.selected_month > 11) {
+            this.selected_month = 0;
+        }
+        this.check_max_day();
+        this.update_input_attr_val();
+    };
+
+    this.decrement_month = function () {
+        this.selected_month--;
+        if (this.selected_month < 0) {
+            this.selected_month = 11;
+        }
+        this.check_max_day();
+        this.update_input_attr_val();
+    };
+
+    this.increment_year = function () {
+        this.selected_year++;
+        if (this.selected_year > 2500) {
+            this.selected_year = 1900;
+        }
+        this.check_leap_year();
+        this.check_max_day();
+        this.update_input_attr_val();
+    };
+
+    this.decrement_year = function () {
+        this.selected_year--;
+        if (this.selected_year < 1900) {
+            this.selected_year = 2500;
+        }
+        this.check_leap_year();
+        this.check_max_day();
+        this.update_input_attr_val();
+    };
 }
 
 $(document).ready(function () {
-    //Set maximum input threshold for days based on year
-    
+    //Initialize datepicker instance
+    var datepicker = new DatePicker();
 
-    day_input.attr('max', max_month_day);
-
+    //Implement core function of datepicker front-end (clicking or changing with keypress)
     $('#increase-day').on('click', function () {
-        check_inputs();
-        increment_day()
+        datepicker.increment_day();
     });
 
     $('#reduce-day').on('click', function () {
-        check_inputs();
-        decrement_day();
+        datepicker.decrement_day();
+    });
+
+    //Additional event handler for changing day to account for keypress
+    $('#day').on('change', function () {
+       datepicker.check_input_values();
     });
 
     $('#increase-month').on('click', function () {
-        check_inputs();
-        increment_month();
+        datepicker.increment_month();
     });
 
     $('#reduce-month').on('click', function () {
-        check_inputs();
-        decrement_month();
+        datepicker.decrement_month();
+    });
+
+    //Add in custom up/down keypress actions to months (text input)
+    $('#month').keydown(function (event) {
+       if (event.keyCode == 38) {
+           datepicker.increment_month();
+       } else if (event.keyCode == 40) {
+           datepicker.decrement_month();
+       }
     });
 
     $('#increase-year').on('click', function () {
-        check_inputs();
-        increment_year();
+        datepicker.increment_year();
     });
 
     $('#reduce-year').on('click', function () {
-        check_inputs();
-        decrement_year();
+        datepicker.decrement_year();
+    });
+
+    //Additional event handler for changing year to account for keypress
+    $('#year').on('change', function () {
+        datepicker.check_input_values();
     });
 });
-
-function check_leap_year() {
-    console.log((selected_year % 4) === 0);
-    return (selected_year % 4) === 0;
-}
-
-function increment_day() {
-    //Increment day accordingly
-    selected_day++;
-    if (selected_day > max_month_day) {
-        selected_day = 1;
-    }
-    day_input.val(selected_day);
-}
-
-function decrement_day() {
-    //Increment day accordingly
-    selected_day--;
-    if (selected_day < 1) {
-        selected_day = max_month_day;
-    }
-
-    day_input.val(selected_day);
-}
-
-function increment_month() {
-    //Increment month
-    selected_month++;
-    if (selected_month > 11) {
-        selected_month = 0;
-    }
-    //Calculate maximum month day
-    check_max_day();
-    month_input.val(months[selected_month].name);
-}
-
-function decrement_month() {
-    //Decrement month
-    selected_month--;
-    if (selected_month < 0) {
-        selected_month = 11;
-    }
-    //Calculate maximum month day
-    check_max_day();
-    month_input.val(months[selected_month].name);
-}
-
-function increment_year() {
-    //Check maximum month day
-    check_max_day();
-    selected_year++;
-    if (selected_year > 2500) {
-        selected_year = 1900;
-        leap_year = true;
-    } else {
-        leap_year = check_leap_year();
-    }
-    year_input.val(selected_year);
-    leap_year_input.val(leap_year);
-}
-
-function decrement_year() {
-    //Check maximum month day
-    check_max_day();
-    selected_year--;
-    if (selected_year < 1900) {
-        selected_year = 2500;
-    } else {
-        leap_year = check_leap_year();
-    }
-    year_input.val(selected_year);
-    leap_year_input.val(leap_year);
-}
