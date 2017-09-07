@@ -39,75 +39,73 @@ $(document).ready(function() {
     year_input.val(selected_year);
     leap_year_input.val(leap_year);
 
+    //Set maximum input threshold for days based on year
+    maximum_month_day();
+    day_input.attr('max', max_month_day);
+
     $('#increase-day').on('click', function () {
+        check_inputs();
         increment_day()
     });
 
     $('#reduce-day').on('click', function () {
+        check_inputs();
         decrement_day();
     });
 
     $('#increase-month').on('click', function () {
-        selected_month++;
-        if(selected_month > 11) {
-            selected_month = 0;
-        }
-        check_max_day();
-        console.log("Updated month: " + months[selected_month].name);
+        check_inputs();
+        increment_month();
     });
 
     $('#reduce-month').on('click', function () {
-        selected_month--;
-        if(selected_month < 0) {
-            selected_month = 11;
-        }
-        check_max_day();
-        console.log("Updated month: " + months[selected_month].name);
+        check_inputs();
+        decrement_month();
     });
 
     $('#increase-year').on('click', function () {
-        selected_year++;
-        if(selected_year > 2500) {
-            selected_year = 1900;
-            leap_year = true;
-        } else {
-            check_leap_year();
-        }
-        console.log("Updated year: " + selected_year);
+        check_inputs();
+        increment_year();
     });
 
     $('#reduce-year').on('click', function () {
-        selected_year--;
-        if(selected_year < 1900) {
-            selected_year = 2500;
-        } else {
-            check_leap_year();
-        }
-        console.log("Updated year: " + selected_year);
+        check_inputs();
+        decrement_year();
     });
 });
 
-function check_max_day(){
-    if (selected_day > months[selected_month].max_days) {
-        selected_day = months[selected_month].max_days;
-    }
+function check_inputs(){
+    selected_day = day_input.val();
+    selected_year = year_input.val();
 }
 
-function check_leap_year(){
-    return (selected_year % 4) === 0;
+//Function check alter day if outside of allowable month range when changing month
+function check_max_day(){
+    maximum_month_day();
+    console.log(selected_day);
+    console.log(max_month_day);
+    if (selected_day > max_month_day) {
+        selected_day = max_month_day;
+        day_input.val(selected_day);
+    }
 }
 
 function maximum_month_day(){
     //Function to calculate maximum allowable day within the month (adapting February for leap years)
-    if (leap_year && selected_month === 2) {
+    if (leap_year && selected_month === 1) {
         max_month_day = 29;
     } else {
         max_month_day = months[selected_month].max_days;
     }
+    day_input.attr('max', max_month_day);
+}
+
+function check_leap_year(){
+    console.log((selected_year % 4) === 0);
+    return (selected_year % 4) === 0;
 }
 
 function increment_day() {
-    max_month_day();
     //Increment day accordingly
     selected_day++;
     if(selected_day > max_month_day) {
@@ -117,12 +115,60 @@ function increment_day() {
 }
 
 function decrement_day() {
-    max_month_day();
-
+    //Increment day accordingly
     selected_day--;
     if(selected_day < 1) {
         selected_day = max_month_day;
     }
-    
+
     day_input.val(selected_day);
+}
+
+function increment_month() {
+    //Increment month
+    selected_month++;
+    if(selected_month > 11) {
+        selected_month = 0;
+    }
+    //Calculate maximum month day
+    check_max_day();
+    month_input.val(months[selected_month].name);
+}
+
+function decrement_month() {
+    //Decrement month
+    selected_month--;
+    if(selected_month < 0) {
+        selected_month = 11;
+    }
+    //Calculate maximum month day
+    check_max_day();
+    month_input.val(months[selected_month].name);
+}
+
+function increment_year(){
+    //Check maximum month day
+    check_max_day();
+    selected_year++;
+    if(selected_year > 2500) {
+        selected_year = 1900;
+        leap_year = true;
+    } else {
+        leap_year = check_leap_year();
+    }
+    year_input.val(selected_year);
+    leap_year_input.val(leap_year);
+}
+
+function decrement_year(){
+    //Check maximum month day
+    check_max_day();
+    selected_year--;
+    if(selected_year < 1900) {
+        selected_year = 2500;
+    } else {
+        leap_year = check_leap_year();
+    }
+    year_input.val(selected_year);
+    leap_year_input.val(leap_year);
 }
