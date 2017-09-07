@@ -60,7 +60,7 @@ function DatePicker() {
     };
 
     //Method for checking a given day relative to the maximum allowable day for a given month and update private variables accordingly
-    this.check_max_day= function () {
+    this.check_max_day = function () {
         this.calc_max_month_day();
         if (this.selected_day > this.max_month_day) {
             this.selected_day = this.max_month_day;
@@ -132,6 +132,59 @@ function DatePicker() {
         this.check_max_day();
         this.update_input_attr_val();
     };
+
+    //Animation functions
+    this.day_rotate_animation = function () {
+        this.day_input.addClass('rotate');
+        //Add callback for when rotation transition is over
+        this.day_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', day_remove_rotate_classes);
+    };
+
+    this.month_rotate_animation = function () {
+        this.month_input.addClass('rotate');
+        //Add callback for when rotation transition is over
+        this.month_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', month_remove_rotate_classes);
+    };
+
+    this.year_rotate_animation = function () {
+        this.year_input.addClass('rotate');
+        //Add callback for when rotation transition is over
+        this.year_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', year_remove_rotate_classes);
+    };
+
+    this.day_reverse_rotate_animation = function () {
+        this.day_input.addClass('reverse-rotate');
+        //Add callback for when rotation transition is over
+        this.day_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', day_remove_rotate_classes);
+    };
+
+    this.month_reverse_rotate_animation = function () {
+        this.month_input.addClass('reverse-rotate');
+        //Add callback for when rotation transition is over
+        this.month_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', month_remove_rotate_classes);
+    };
+
+    this.year_reverse_rotate_animation = function () {
+        this.year_input.addClass('reverse-rotate');
+        //Add callback for when rotation transition is over
+        this.year_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', year_remove_rotate_classes);
+    };
+}
+
+//Callback functions
+function day_remove_rotate_classes () {
+    $('#day').removeClass('rotate');
+    $('#day').removeClass('reverse-rotate');
+}
+
+function month_remove_rotate_classes () {
+    $('#month').removeClass('rotate');
+    $('#month').removeClass('reverse-rotate');
+}
+
+function year_remove_rotate_classes () {
+    $('#year').removeClass('rotate');
+    $('#year').removeClass('reverse-rotate');
 }
 
 $(document).ready(function () {
@@ -141,40 +194,46 @@ $(document).ready(function () {
 
     //Implement core function of datepicker front-end (clicking, holding or changing with keypress)
     $('#increase-day').on('click', function () {
+        datepicker.day_rotate_animation();
         datepicker.increment_day();
     });
 
     $('#reduce-day').on('click', function () {
+        datepicker.day_reverse_rotate_animation();
         datepicker.decrement_day();
     });
 
     //Additional event handler for changing day to account for keypress
     $('#day').on('change', function () {
-       datepicker.check_input_values();
+        datepicker.check_input_values();
     });
 
     $('#increase-month').on('click', function () {
+        datepicker.month_rotate_animation();
         datepicker.increment_month();
     });
 
     $('#reduce-month').on('click', function () {
+        datepicker.month_reverse_rotate_animation();
         datepicker.decrement_month();
     });
 
     //Add in custom up/down keypress actions to months (text input)
     $('#month').keydown(function (event) {
-       if (event.keyCode == 38) {
-           datepicker.increment_month();
-       } else if (event.keyCode == 40) {
-           datepicker.decrement_month();
-       }
+        if (event.keyCode == 38) {
+            datepicker.increment_month();
+        } else if (event.keyCode == 40) {
+            datepicker.decrement_month();
+        }
     });
 
     $('#increase-year').on('click', function () {
+        datepicker.year_rotate_animation();
         datepicker.increment_year();
     });
 
     $('#reduce-year').on('click', function () {
+        datepicker.year_reverse_rotate_animation();
         datepicker.decrement_year();
     });
 
