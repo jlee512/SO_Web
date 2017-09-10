@@ -134,63 +134,69 @@ function DatePicker() {
     };
 
     //Animation functions
+    //DAY ANIMATION
     this.day_rotate_animation = function () {
+        var self = this;
         this.day_input.addClass('rotate');
         //Add callback for when rotation transition is over
-        this.day_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', day_remove_rotate_classes);
-    };
-
-    this.month_rotate_animation = function () {
-        this.month_input.addClass('rotate');
-        //Add callback for when rotation transition is over
-        this.month_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', month_remove_rotate_classes);
-    };
-
-    this.year_rotate_animation = function () {
-        this.year_input.addClass('rotate');
-        //Add callback for when rotation transition is over
-        this.year_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', year_remove_rotate_classes);
+        this.day_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+            self.day_input.removeClass('rotate');
+        });
     };
 
     this.day_reverse_rotate_animation = function () {
+        var self = this;
         this.day_input.addClass('reverse-rotate');
         //Add callback for when rotation transition is over
-        this.day_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', day_remove_rotate_classes);
+        this.day_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+            self.day_input.removeClass('reverse-rotate');
+        });
+    };
+
+    //MONTH ANIMATION
+    this.month_rotate_animation = function () {
+        var self = this;
+        this.month_input.addClass('rotate');
+        //Add callback for when rotation transition is over
+        this.month_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+            self.month_input.removeClass('rotate');
+        });
     };
 
     this.month_reverse_rotate_animation = function () {
+        var self = this;
         this.month_input.addClass('reverse-rotate');
         //Add callback for when rotation transition is over
-        this.month_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', month_remove_rotate_classes);
+        this.month_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+            self.month_input.removeClass('reverse-rotate');
+        });
+    };
+
+    //YEAR ANIMATION
+    this.year_rotate_animation = function () {
+        var self = this;
+        this.year_input.addClass('rotate');
+        //Add callback for when rotation transition is over
+        this.year_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+            self.year_input.removeClass('rotate');
+        });
     };
 
     this.year_reverse_rotate_animation = function () {
+        var self = this;
         this.year_input.addClass('reverse-rotate');
         //Add callback for when rotation transition is over
-        this.year_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', year_remove_rotate_classes);
+        this.year_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
+            var self
+            self.year_input.removeClass('reverse-rotate');
+
+        });
     };
-}
-
-//Callback functions
-function day_remove_rotate_classes () {
-    $('#day').removeClass('rotate');
-    $('#day').removeClass('reverse-rotate');
-}
-
-function month_remove_rotate_classes () {
-    $('#month').removeClass('rotate');
-    $('#month').removeClass('reverse-rotate');
-}
-
-function year_remove_rotate_classes () {
-    $('#year').removeClass('rotate');
-    $('#year').removeClass('reverse-rotate');
 }
 
 $(document).ready(function () {
     //Initialize datepicker instance
     var datepicker = new DatePicker();
-    var interval;
 
     //Implement core function of datepicker front-end (clicking, holding or changing with keypress)
     $('#increase-day').on('click', function () {
@@ -240,9 +246,5 @@ $(document).ready(function () {
     //Additional event handler for changing year to account for keypress
     $('#year').on('change', function () {
         datepicker.check_input_values();
-    });
-
-    $(document).on('mouseup', function () {
-        clearInterval(interval);
     });
 });
