@@ -1,5 +1,5 @@
 /**
- * Created by julia on 5/09/2017.
+ * Created by julian on 5/09/2017.
  */
 
 function DatePicker() {
@@ -39,8 +39,6 @@ function DatePicker() {
         this.year_input.val(this.selected_year);
         this.leap_year_input.val(this.leap_year);
     };
-    //Call this method initially when constructed
-    this.update_input_attr_val();
 
     //Method for checking leap year status
     this.check_leap_year = function () {
@@ -65,10 +63,11 @@ function DatePicker() {
         if (this.selected_day > this.max_month_day) {
             this.selected_day = this.max_month_day;
         }
-        this.update_input_attr_val();
+        // this.update_input_attr_val();
     };
-    //Call this method initially when constructed
+    //Call the check_max_day and update_input_attr_val methods initially when constructed
     this.check_max_day();
+    this.update_input_attr_val();
 
     //Method used to check the current day and year input values
     this.check_input_values = function () {
@@ -76,7 +75,7 @@ function DatePicker() {
         this.selected_year = this.year_input.val();
         this.check_leap_year();
         this.check_max_day();
-        this.update_input_attr_val();
+        // this.update_input_attr_val();
     };
 
     this.increment_day = function () {
@@ -84,7 +83,6 @@ function DatePicker() {
         if (this.selected_day > this.max_month_day) {
             this.selected_day = 1;
         }
-        this.update_input_attr_val();
     };
 
     this.decrement_day = function () {
@@ -92,7 +90,6 @@ function DatePicker() {
         if (this.selected_day < 1) {
             this.selected_day = this.max_month_day;
         }
-        this.update_input_attr_val();
     };
 
     this.increment_month = function () {
@@ -101,7 +98,6 @@ function DatePicker() {
             this.selected_month = 0;
         }
         this.check_max_day();
-        this.update_input_attr_val();
     };
 
     this.decrement_month = function () {
@@ -110,7 +106,6 @@ function DatePicker() {
             this.selected_month = 11;
         }
         this.check_max_day();
-        this.update_input_attr_val();
     };
 
     this.increment_year = function () {
@@ -120,7 +115,6 @@ function DatePicker() {
         }
         this.check_leap_year();
         this.check_max_day();
-        this.update_input_attr_val();
     };
 
     this.decrement_year = function () {
@@ -130,7 +124,6 @@ function DatePicker() {
         }
         this.check_leap_year();
         this.check_max_day();
-        this.update_input_attr_val();
     };
 
     //Animation functions
@@ -141,6 +134,7 @@ function DatePicker() {
         //Add callback for when rotation transition is over
         this.day_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
             self.day_input.removeClass('rotate');
+            self.update_input_attr_val();
         });
     };
 
@@ -150,6 +144,7 @@ function DatePicker() {
         //Add callback for when rotation transition is over
         this.day_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
             self.day_input.removeClass('reverse-rotate');
+            self.update_input_attr_val();
         });
     };
 
@@ -160,6 +155,7 @@ function DatePicker() {
         //Add callback for when rotation transition is over
         this.month_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
             self.month_input.removeClass('rotate');
+            self.update_input_attr_val();
         });
     };
 
@@ -169,6 +165,7 @@ function DatePicker() {
         //Add callback for when rotation transition is over
         this.month_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
             self.month_input.removeClass('reverse-rotate');
+            self.update_input_attr_val();
         });
     };
 
@@ -179,6 +176,7 @@ function DatePicker() {
         //Add callback for when rotation transition is over
         this.year_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
             self.year_input.removeClass('rotate');
+            self.update_input_attr_val();
         });
     };
 
@@ -187,8 +185,8 @@ function DatePicker() {
         this.year_input.addClass('reverse-rotate');
         //Add callback for when rotation transition is over
         this.year_input.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function () {
-            var self
             self.year_input.removeClass('reverse-rotate');
+            self.update_input_attr_val();
 
         });
     };
